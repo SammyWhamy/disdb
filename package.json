@@ -1,7 +1,7 @@
 {
   "name": "disdb",
   "version": "0.0.1",
-  "description": "A package to use Discord as a database",
+  "description": "A package to use Discord as a (horrible) database",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "https://github.com/SammyWhamy/disdb",
