@@ -1,6 +1,7 @@
 {
   "name": "disdb",
   "version": "0.0.1",
+  "type": "module",
   "description": "A package to use Discord as a (horrible) database",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
