@@ -3,7 +3,7 @@ import {getGlobalIndex} from "../getGlobalIndex.js";
 import {getDataIndex} from "../getDataIndex.js";
 import {regexConfig} from "../../../config/commonConfig.js";
 
-export async function get(slave: Client, guildId: string, key: string): Promise<string> {
+export async function get(slave: Client, guildId: string, key: string): Promise<string | null> {
     if(!regexConfig.key.test(key))
         throw new Error('Key must match a-zA-Z0-9_-');
 
@@ -16,5 +16,5 @@ export async function get(slave: Client, guildId: string, key: string): Promise<
             return (await dataIndex.channel.messages.fetch(match[1])).content;
     }
 
-    throw new Error('Key not found');
+    return null;
 }

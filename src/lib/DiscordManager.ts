@@ -111,7 +111,7 @@ export class DiscordManager {
         await set(this.master.client, this.getRandomSlave().client, this.config.storageServer, key, value);
     }
 
-    public async get(key: string): Promise<string | undefined> {
+    public async get(key: string): Promise<string | null> {
         if(!this.master)
             throw new Error("Master not initialized");
 

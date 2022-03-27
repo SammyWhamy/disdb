@@ -42,7 +42,7 @@ export class StorageClient {
         await this.discordManager.set(key, value);
     }
 
-    public async get(key: string): Promise<string | undefined> {
+    public async get(key: string): Promise<string | null> {
         if(!this.discordManager)
             throw new Error("Discord manager is not initialized");
 
