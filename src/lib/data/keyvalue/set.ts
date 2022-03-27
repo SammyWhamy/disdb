@@ -17,7 +17,6 @@ export async function set(this: DiscordManager, key: string, value: string) {
         throw new Error('Key must match a-zA-Z0-9_-');
 
     const slave = this.getRandomSlave().client;
-    const guild = slave.guilds.cache.get(this.guildId)!;
     const globalIndex = await getGlobalIndex(slave, this.guildId);
 
     let availableIndex: DataIndex | undefined;
@@ -39,6 +38,6 @@ export async function set(this: DiscordManager, key: string, value: string) {
     if(!availableIndex)
         throw new Error('Failed to get an available data channel');
 
-    const dataMessage = await (guild.channels.cache.get(availableIndex.channel.id) as TextChannel).send(value);
+    const dataMessage = await (slave.guilds.cache.get(this.guildId)!.channels.cache.get(availableIndex.channel.id) as TextChannel).send(value);
     await availableIndex.indexMessage.edit(`${availableIndex.index}\n${key}:${dataMessage.id}`);
 }
