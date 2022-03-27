@@ -1,5 +1,4 @@
 import {TextChannel} from "discord.js";
-import {getGlobalIndex} from "../getGlobalIndex.js";
 import {getDataIndex} from "../getDataIndex.js";
 import {DataIndex} from "../../../types/DataIndex.js";
 import {createDataChannel} from "../createDataChannel.js";
@@ -10,6 +9,9 @@ export async function set(this: DiscordManager, key: string, value: string) {
     if(!this.master)
         throw new Error("Master not initialized");
 
+    if(!this.globalIndex)
+        throw new Error("Global index not initialized");
+
     if(value.length > 1899)
         throw new Error('Value is too large to store in key value store (max 1899)');
 
@@ -17,10 +19,9 @@ export async function set(this: DiscordManager, key: string, value: string) {
         throw new Error('Key must match a-zA-Z0-9_-');
 
     const slave = this.getRandomSlave().client;
-    const globalIndex = await getGlobalIndex(slave, this.guildId);
 
     let availableIndex: DataIndex | undefined;
-    for(const dataChannel of globalIndex.dataChannels) {
+    for(const dataChannel of this.globalIndex.dataChannels) {
         const dataIndex = await getDataIndex(this.master.client, dataChannel);
 
         const match = dataIndex.index.match(new RegExp(`${key}:(\\d{18,19})`, 'm'));

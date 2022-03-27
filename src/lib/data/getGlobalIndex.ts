@@ -1,9 +1,12 @@
-import {Client} from "discord.js";
 import {GlobalIndex} from "../../types/GlobalIndex.js";
 import {regexConfig} from "../../config/commonConfig.js";
+import {DiscordManager} from "../DiscordManager.js";
 
-export async function getGlobalIndex(client: Client, guildId: string): Promise<GlobalIndex> {
-    let guild = client.guilds.cache.get(guildId);
+export async function getGlobalIndex(this: DiscordManager): Promise<GlobalIndex> {
+    if(!this.master)
+        throw new Error("Master not initialized");
+
+    let guild = this.master.client.guilds.cache.get(this.guildId);
 
     if(!guild)
         throw new Error("Guild not found");
@@ -16,9 +19,9 @@ export async function getGlobalIndex(client: Client, guildId: string): Promise<G
     if(!indexChannel.topic)
         throw new Error("Index message could not be found.");
 
-    const index = (await indexChannel.messages.fetch(indexChannel.topic)).content;
+    const indexMessage = await indexChannel.messages.fetch(indexChannel.topic)
 
-    const dataChannels = index.match(regexConfig.index.data)?.map(x => {
+    const dataChannels = indexMessage.content.match(regexConfig.index.data)?.map(x => {
         const match = x.match(regexConfig.index.dataGroups);
 
         if(!match)
@@ -27,13 +30,13 @@ export async function getGlobalIndex(client: Client, guildId: string): Promise<G
         return {
             id: parseInt(match[1]),
             channelId: match[2],
-            guildId: guildId,
+            guildId: this.guildId,
         };
     }) ?? [];
 
     return {
-        rawIndex: index,
+        indexMessage: indexMessage,
         dataChannels: dataChannels,
-        guildId: guildId,
+        guildId: this.guildId,
     }
 }

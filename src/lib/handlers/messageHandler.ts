@@ -2,7 +2,7 @@ import {Message} from "discord.js";
 import {setup} from "../commands/setup.js";
 import {defaultLogger as console} from "../../utils/Logger.js";
 
-export async function masterMessageHandler(message: Message, prefix: string) {
+export async function messageHandler(message: Message, prefix: string) {
     if (message.author.bot || message.channel.type === "DM" || !message.content) return;
 
     if (!message.content.startsWith(prefix)) return;

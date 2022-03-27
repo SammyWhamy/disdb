@@ -1,7 +1,8 @@
 import {DataChannel} from "./DataChannel.js";
+import {Message} from "discord.js";
 
 export interface GlobalIndex {
-    rawIndex: string,
+    indexMessage: Message,
     dataChannels: DataChannel[],
     guildId: string,
 }
