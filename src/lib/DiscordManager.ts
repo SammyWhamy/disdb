@@ -19,6 +19,7 @@ export class DiscordManager {
             available: false,
             client: new Client(discordConfig.master)
         };
+        console.debug("Connecting master client...");
         await this.connectMaster(this.config.bots.master);
 
         this.slaves = [];
@@ -27,6 +28,7 @@ export class DiscordManager {
                 available: false,
                 client: new Client(discordConfig.slave)
             });
+            console.debug(`Connecting slave client ${i}...`);
             await this.connectSlave(i, this.config.bots.slaves[i]);
         }
 
@@ -39,7 +41,7 @@ export class DiscordManager {
 
         await this.master.client.login(token);
         this.master.available = true;
-        console.log("Master client connected");
+        console.info("Master client connected");
     }
 
     private startListeners() {
