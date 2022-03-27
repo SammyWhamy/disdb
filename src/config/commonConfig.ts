@@ -2,6 +2,7 @@ export const regexConfig = {
     index: {
         category: /c:\d{18,19}/m,
         data: /d_\d{1,9}:\d{18,19}/gm,
+        dataGroups: /d_(\d{1,9}):(\d{18,19})/,
     },
     id: /\d{18,19}/,
     key: /^[a-zA-Z0-9_-]{1,100}$/,

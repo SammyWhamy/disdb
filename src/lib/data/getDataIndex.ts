@@ -1,27 +1,24 @@
 import {Client, TextChannel} from "discord.js";
 import {DataIndex} from "../../types/dataIndex.js";
+import {DataChannel} from "../../types/DataChannel.js";
 
-export async function getDataIndex(client: Client, guildId: string, dataIndex: number, globalIndex: string): Promise<DataIndex> {
-    let guild = client.guilds.cache.get(guildId);
+export async function getDataIndex(client: Client, dataChannel: DataChannel): Promise<DataIndex> {
+    let guild = client.guilds.cache.get(dataChannel.guildId);
 
     if(!guild)
         throw new Error("Guild not found");
 
-    const dataChannelIndex = globalIndex.match(new RegExp(`d_${dataIndex}:(\\d{18,19})`));
-    if(!dataChannelIndex || !dataChannelIndex[1])
+    const discordDataChannel = guild.channels.cache.get(dataChannel.channelId) as TextChannel;
+    if(!discordDataChannel)
         throw new Error("Data channel could not be found.");
 
-    const dataChannel = guild.channels.cache.get(dataChannelIndex[1]) as TextChannel;
-    if(!dataChannel)
-        throw new Error("Data channel could not be found.");
-
-    const indexMessage = await dataChannel.messages.fetch(dataChannel.topic!);
+    const indexMessage = await discordDataChannel.messages.fetch(discordDataChannel.topic!);
     const index = indexMessage.content;
 
     return {
         index: index,
-        full: dataChannel.nsfw,
-        channel: dataChannel,
+        full: discordDataChannel.nsfw,
+        channel: discordDataChannel,
         indexMessage: indexMessage,
     };
 }

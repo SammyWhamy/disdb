@@ -18,31 +18,25 @@ export async function set(master: Client, slave: Client, guildId: string, key: s
 
     const globalIndex = await getGlobalIndex(slave, guildId);
 
-    let indexNum = 0;
-    let dataIndex: DataIndex | undefined;
-    while(!dataIndex || dataIndex.full) {
-        try {
-            dataIndex = await getDataIndex(master, guildId, indexNum, globalIndex.index);
-        } catch (e: any) {
-            if(e.message === "Data channel could not be found.") {
-                let newDataIndex = await createDataChannel(master.guilds.cache.get(guildId)!);
-                if(!newDataIndex)
-                    throw new Error('Could not create a new data channel');
-                dataIndex = newDataIndex;
-            }
-        }
-
-        if(!dataIndex)
-            throw new Error('Could not get data index');
+    let availableIndex: DataIndex | undefined;
+    for(const dataChannel of globalIndex.dataChannels) {
+        const dataIndex = await getDataIndex(master, dataChannel);
 
         if(dataIndex.index.length + key.length + 20 > 2000) {
             await dataIndex.channel.setNSFW(true);
             dataIndex.full = true;
         }
 
-        indexNum++;
+        if(!dataIndex.full)
+            availableIndex = dataIndex;
     }
 
-    const dataMessage = await (slave.guilds.cache.get(guildId)!.channels.cache.get(dataIndex.channel.id) as TextChannel).send(value);
-    await dataIndex.indexMessage.edit(`${dataIndex.index}\n${key}:${dataMessage.id}`);
+    if(!availableIndex)
+        availableIndex = await createDataChannel(master.guilds.cache.get(guildId)!);
+
+    if(!availableIndex)
+        throw new Error('Failed to get an available data channel');
+
+    const dataMessage = await (slave.guilds.cache.get(guildId)!.channels.cache.get(availableIndex.channel.id) as TextChannel).send(value);
+    await availableIndex.indexMessage.edit(`${availableIndex.index}\n${key}:${dataMessage.id}`);
 }

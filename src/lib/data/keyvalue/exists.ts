@@ -9,10 +9,8 @@ export async function exists(slave: Client, guildId: string, key: string): Promi
 
     const globalIndex = await getGlobalIndex(slave, guildId);
 
-    let indexNum = 0;
-
-    for(let i = 0; i < globalIndex.dataChannels; i++) {
-        const dataIndex = await getDataIndex(slave, guildId, indexNum, globalIndex.index);
+    for(const dataChannel of globalIndex.dataChannels) {
+        const dataIndex = await getDataIndex(slave, dataChannel);
         const match = dataIndex.index.match(new RegExp(`${key}:(\\d{18,19})`, 'm'));
         if(match && match[1])
             return true;

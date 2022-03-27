@@ -1,5 +1,5 @@
 import {Client} from "discord.js";
-import {GlobalIndex} from "../../types/globalIndex.js";
+import {GlobalIndex} from "../../types/GlobalIndex.js";
 import {regexConfig} from "../../config/commonConfig.js";
 
 export async function getGlobalIndex(client: Client, guildId: string): Promise<GlobalIndex> {
@@ -18,8 +18,22 @@ export async function getGlobalIndex(client: Client, guildId: string): Promise<G
 
     const index = (await indexChannel.messages.fetch(indexChannel.topic)).content;
 
+    const dataChannels = index.match(regexConfig.index.data)?.map(x => {
+        const match = x.match(regexConfig.index.dataGroups);
+
+        if(!match)
+            throw new Error("Index message could not be parsed.");
+
+        return {
+            id: parseInt(match[0]),
+            channelId: match[1],
+            guildId: guildId,
+        };
+    }) ?? [];
+
     return {
-        index: index,
-        dataChannels: index.match(regexConfig.index.data)?.length ?? 0,
+        rawIndex: index,
+        dataChannels: dataChannels,
+        guildId: guildId,
     }
 }
