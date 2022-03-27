@@ -7,6 +7,7 @@ import {DMaster, DSlave} from "../types/DiscordClients.js";
 import { set } from "./data/keyvalue/set.js";
 import { get } from "./data/keyvalue/get.js";
 import { exists } from "./data/keyvalue/exists.js";
+import {del} from "./data/keyvalue/delete.js";
 
 export class DiscordManager {
     private readonly config: Config["discord"];
@@ -94,5 +95,12 @@ export class DiscordManager {
             throw new Error("Master not initialized");
 
         return await exists(this.getRandomSlave().client, this.config.storageServer, key);
+    }
+
+    public async delete(key: string) {
+        if(!this.master)
+            throw new Error("Master not initialized");
+
+        await del(this.master.client, this.getRandomSlave().client, this.config.storageServer, key);
     }
 }

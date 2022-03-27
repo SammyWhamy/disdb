@@ -55,4 +55,11 @@ export class StorageClient {
 
         await this.discordManager.exists(key);
     }
+
+    public async delete(key: string): Promise<void> {
+        if(!this.discordManager)
+            throw new Error("Discord manager is not initialized");
+
+        await this.discordManager.delete(key);
+    }
 }
