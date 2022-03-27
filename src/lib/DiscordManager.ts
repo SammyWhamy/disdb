@@ -43,9 +43,21 @@ export class DiscordManager {
         if(!this.master)
             throw new Error("Master not initialized");
 
+        const readyPromise = new Promise<void>((resolve, reject) => {
+            this.master!.client.once("ready", () => {
+                this.master!.available = true;
+                console.info("Master client ready");
+                resolve();
+            });
+
+            setTimeout(() => {
+                reject("Master client connection timed out");
+            }, 10000);
+        });
+
         await this.master.client.login(token);
-        this.master.available = true;
-        console.info("Master client connected");
+
+        await readyPromise;
     }
 
     private startListeners() {
@@ -63,9 +75,21 @@ export class DiscordManager {
         if(!this.slaves || !this.slaves[index])
             throw new Error("Slave not initialized");
 
+        const readyPromise = new Promise<void>((resolve, reject) => {
+            this.slaves![index].client.once("ready", () => {
+                this.slaves![index].available = true;
+                console.info(`Slave client ${index} ready`);
+                resolve();
+            });
+
+            setTimeout(() => {
+                reject(`Slave client ${index} connection timed out`);
+            }, 10000);
+        });
+
         await this.slaves[index].client.login(token);
-        this.slaves[index].available = true;
-        console.info(`Slave client ${index} connected`);
+
+        await readyPromise;
     }
 
     private getRandomSlave(): DSlave {
