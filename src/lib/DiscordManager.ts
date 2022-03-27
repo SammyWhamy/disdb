@@ -1,6 +1,8 @@
 import {Config} from "../types/config.js";
 import {discordConfig} from "../config/discordConfig.js";
 import {Client} from "discord.js";
+import {masterMessageHandler} from "./handlers/masterMessageHandler.js";
+import {defaultLogger as console} from "../utils/Logger.js";
 import {DMaster, DSlave} from "../types/discord.js";
 
 export class DiscordManager {
@@ -27,6 +29,8 @@ export class DiscordManager {
             });
             await this.connectSlave(i, this.config.bots.slaves[i]);
         }
+
+        this.startListeners();
     }
 
     private async connectMaster(token: string) {
@@ -36,6 +40,17 @@ export class DiscordManager {
         await this.master.client.login(token);
         this.master.available = true;
         console.log("Master client connected");
+    }
+
+    private startListeners() {
+        if(!this.master)
+            throw new Error("Master not initialized");
+
+        let prefix = this.config.prefix;
+        console.debug(`Using prefix ${prefix}`);
+        this.master.client.on("messageCreate", m => masterMessageHandler(m, prefix));
+
+        console.debug("Listeners started");
     }
 
     private async connectSlave(index: number, token: string) {
