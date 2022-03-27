@@ -1,5 +1,5 @@
 import {Client, TextChannel} from "discord.js";
-import {DataIndex} from "../../types/dataIndex.js";
+import {DataIndex} from "../../types/DataIndex.js";
 import {DataChannel} from "../../types/DataChannel.js";
 
 export async function getDataIndex(client: Client, dataChannel: DataChannel): Promise<DataIndex> {

@@ -1,4 +1,4 @@
-import {Config} from "../types/config.js";
+import {Config} from "../types/Config.js";
 import {DiscordManager} from "./DiscordManager.js";
 import {defaultLogger as console} from "../utils/Logger.js";
 

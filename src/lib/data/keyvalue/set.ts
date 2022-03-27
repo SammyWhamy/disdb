@@ -1,7 +1,7 @@
 import {Client, TextChannel} from "discord.js";
 import {getGlobalIndex} from "../getGlobalIndex.js";
 import {getDataIndex} from "../getDataIndex.js";
-import {DataIndex} from "../../../types/dataIndex.js";
+import {DataIndex} from "../../../types/DataIndex.js";
 import {createDataChannel} from "../createDataChannel.js";
 import {regexConfig} from "../../../config/commonConfig.js";
 import {exists} from "./exists.js";

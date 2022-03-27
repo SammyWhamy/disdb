@@ -1,9 +1,9 @@
-import {Config} from "../types/config.js";
+import {Config} from "../types/Config.js";
 import {discordConfig} from "../config/discordConfig.js";
 import {Client} from "discord.js";
 import {masterMessageHandler} from "./handlers/masterMessageHandler.js";
 import {defaultLogger as console} from "../utils/Logger.js";
-import {DMaster, DSlave} from "../types/discord.js";
+import {DMaster, DSlave} from "../types/DiscordClients.js";
 import { set } from "./data/keyvalue/set.js";
 import { get } from "./data/keyvalue/get.js";
 import { exists } from "./data/keyvalue/exists.js";

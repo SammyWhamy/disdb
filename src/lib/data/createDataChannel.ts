@@ -1,6 +1,6 @@
 import {Guild} from "discord.js";
 import {regexConfig} from "../../config/commonConfig.js";
-import {DataIndex} from "../../types/dataIndex.js";
+import {DataIndex} from "../../types/DataIndex.js";
 
 export async function createDataChannel(guild: Guild): Promise<DataIndex | undefined> {
     if(!guild.rulesChannel) {
