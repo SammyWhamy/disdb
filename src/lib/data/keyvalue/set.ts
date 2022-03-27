@@ -1,26 +1,28 @@
-import {Client, TextChannel} from "discord.js";
+import {TextChannel} from "discord.js";
 import {getGlobalIndex} from "../getGlobalIndex.js";
 import {getDataIndex} from "../getDataIndex.js";
 import {DataIndex} from "../../../types/DataIndex.js";
 import {createDataChannel} from "../createDataChannel.js";
 import {regexConfig} from "../../../config/commonConfig.js";
-import {exists} from "./exists.js";
+import {DiscordManager} from "../../DiscordManager.js";
 
-export async function set(master: Client, slave: Client, guildId: string, key: string, value: string) {
+export async function set(this: DiscordManager, key: string, value: string) {
+    if(!this.master)
+        throw new Error("Master not initialized");
+
     if(value.length > 1899)
         throw new Error('Value is too large to store in key value store (max 1899)');
 
     if(!regexConfig.key.test(key))
         throw new Error('Key must match a-zA-Z0-9_-');
 
-    if(await exists(slave, guildId, key))
-        throw new Error('Key already exists');
-
-    const globalIndex = await getGlobalIndex(slave, guildId);
+    const slave = this.getRandomSlave().client;
+    const guild = slave.guilds.cache.get(this.guildId)!;
+    const globalIndex = await getGlobalIndex(slave, this.guildId);
 
     let availableIndex: DataIndex | undefined;
     for(const dataChannel of globalIndex.dataChannels) {
-        const dataIndex = await getDataIndex(master, dataChannel);
+        const dataIndex = await getDataIndex(this.master.client, dataChannel);
 
         if(dataIndex.index.length + key.length + 20 > 2000) {
             await dataIndex.channel.setNSFW(true);
@@ -32,11 +34,11 @@ export async function set(master: Client, slave: Client, guildId: string, key: s
     }
 
     if(!availableIndex)
-        availableIndex = await createDataChannel(master.guilds.cache.get(guildId)!);
+        availableIndex = await createDataChannel(this.master.client.guilds.cache.get(this.guildId)!);
 
     if(!availableIndex)
         throw new Error('Failed to get an available data channel');
 
-    const dataMessage = await (slave.guilds.cache.get(guildId)!.channels.cache.get(availableIndex.channel.id) as TextChannel).send(value);
+    const dataMessage = await (guild.channels.cache.get(availableIndex.channel.id) as TextChannel).send(value);
     await availableIndex.indexMessage.edit(`${availableIndex.index}\n${key}:${dataMessage.id}`);
 }

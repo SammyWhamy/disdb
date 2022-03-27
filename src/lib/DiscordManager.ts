@@ -11,11 +11,18 @@ import {del} from "./data/keyvalue/delete.js";
 
 export class DiscordManager {
     private readonly config: Config["discord"];
-    private master: DMaster | undefined;
-    private slaves: DSlave[] | undefined;
+    protected master: DMaster | undefined;
+    protected slaves: DSlave[] | undefined;
+    protected guildId: string;
+
+    public set = set;
+    public get = get;
+    public del = del;
+    public exists = exists;
 
     constructor(config: Config["discord"]) {
         this.config = config;
+        this.guildId = config.storageServer;
     }
 
     public async connect() {
@@ -92,7 +99,7 @@ export class DiscordManager {
         await readyPromise;
     }
 
-    private getRandomSlave(): DSlave {
+    protected getRandomSlave(): DSlave {
         if(!this.slaves)
             throw new Error("Slaves not initialized");
 
@@ -102,33 +109,5 @@ export class DiscordManager {
 
     public getSlaveById(id: string): DSlave | undefined {
         return this.slaves?.find(s => s.client.user?.id === id);
-    }
-
-    public async set(key: string, value: string) {
-        if(!this.master)
-            throw new Error("Master not initialized");
-
-        await set(this.master.client, this.getRandomSlave().client, this.config.storageServer, key, value);
-    }
-
-    public async get(key: string): Promise<string | null> {
-        if(!this.master)
-            throw new Error("Master not initialized");
-
-        return await get(this.getRandomSlave().client, this.config.storageServer, key);
-    }
-
-    public async exists(key: string): Promise<boolean> {
-        if(!this.master)
-            throw new Error("Master not initialized");
-
-        return await exists(this.getRandomSlave().client, this.config.storageServer, key);
-    }
-
-    public async delete(key: string) {
-        if(!this.master)
-            throw new Error("Master not initialized");
-
-        await del(this.master.client, this.getRandomSlave().client, this.config.storageServer, key);
     }
 }

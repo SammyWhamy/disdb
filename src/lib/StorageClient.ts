@@ -60,6 +60,6 @@ export class StorageClient {
         if(!this.discordManager)
             throw new Error("Discord manager is not initialized");
 
-        await this.discordManager.delete(key);
+        await this.discordManager.del(key);
     }
 }
