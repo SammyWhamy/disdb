@@ -100,6 +100,10 @@ export class DiscordManager {
         return this.slaves[index];
     }
 
+    public getSlaveById(id: string): DSlave | undefined {
+        return this.slaves?.find(s => s.client.user?.id === id);
+    }
+
     public async set(key: string, value: string) {
         if(!this.master)
             throw new Error("Master not initialized");
