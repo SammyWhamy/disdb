@@ -1,5 +1,4 @@
 import {regexConfig} from "../../../config/commonConfig.js";
-import {getGlobalIndex} from "../getGlobalIndex.js";
 import {getDataIndex} from "../getDataIndex.js";
 import {DiscordManager} from "../../DiscordManager.js";
 
@@ -7,14 +6,14 @@ export async function del(this: DiscordManager, key: string) {
     if(!this.master)
         throw new Error("Master not initialized");
 
+    if(!this.globalIndex)
+        throw new Error("Global index not initialized");
+
     if(!regexConfig.key.test(key))
         throw new Error('Key must match a-zA-Z0-9_-');
 
-    const slave = this.getRandomSlave().client;
-    const globalIndex = await getGlobalIndex(slave, this.guildId);
-
-    for(const dataChannel of globalIndex.dataChannels) {
-        const dataIndex = await getDataIndex(slave, dataChannel);
+    for(const dataChannel of this.globalIndex.dataChannels) {
+        const dataIndex = await getDataIndex(this.getRandomSlave().client, dataChannel);
         const match = dataIndex.index.match(new RegExp(`${key}:(\\d{18,19})`, 'm'));
         if(match && match[1]) {
             await dataIndex.channel.messages.delete(match[1])
