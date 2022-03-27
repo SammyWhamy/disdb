@@ -30,7 +30,29 @@ export class StorageClient {
 
     public async connect(): Promise<void> {
         this.discordManager = new DiscordManager(this.config.discord);
+        console.debug("Initializing Discord manager");
         await this.discordManager.connect();
-        console.log("Discord manager initialized");
+        console.info("Discord manager initialized");
+    }
+
+    public async set(key: string, value: string): Promise<void> {
+        if(!this.discordManager)
+            throw new Error("Discord manager is not initialized");
+
+        await this.discordManager.set(key, value);
+    }
+
+    public async get(key: string): Promise<string | undefined> {
+        if(!this.discordManager)
+            throw new Error("Discord manager is not initialized");
+
+        return this.discordManager.get(key);
+    }
+
+    public async exists(key: string): Promise<void> {
+        if(!this.discordManager)
+            throw new Error("Discord manager is not initialized");
+
+        await this.discordManager.exists(key);
     }
 }

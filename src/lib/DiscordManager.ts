@@ -4,6 +4,9 @@ import {Client} from "discord.js";
 import {masterMessageHandler} from "./handlers/masterMessageHandler.js";
 import {defaultLogger as console} from "../utils/Logger.js";
 import {DMaster, DSlave} from "../types/discord.js";
+import { set } from "./data/keyvalue/set.js";
+import { get } from "./data/keyvalue/get.js";
+import { exists } from "./data/keyvalue/exists.js";
 
 export class DiscordManager {
     private readonly config: Config["discord"];
@@ -61,6 +64,35 @@ export class DiscordManager {
 
         await this.slaves[index].client.login(token);
         this.slaves[index].available = true;
-        console.log(`Slave client ${index} connected`);
+        console.info(`Slave client ${index} connected`);
+    }
+
+    private getRandomSlave(): DSlave {
+        if(!this.slaves)
+            throw new Error("Slaves not initialized");
+
+        let index = Math.floor(Math.random() * this.slaves.length);
+        return this.slaves[index];
+    }
+
+    public async set(key: string, value: string) {
+        if(!this.master)
+            throw new Error("Master not initialized");
+
+        await set(this.master.client, this.getRandomSlave().client, this.config.storageServer, key, value);
+    }
+
+    public async get(key: string): Promise<string | undefined> {
+        if(!this.master)
+            throw new Error("Master not initialized");
+
+        return await get(this.getRandomSlave().client, this.config.storageServer, key);
+    }
+
+    public async exists(key: string): Promise<boolean> {
+        if(!this.master)
+            throw new Error("Master not initialized");
+
+        return await exists(this.getRandomSlave().client, this.config.storageServer, key);
     }
 }
