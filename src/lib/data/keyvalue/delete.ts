@@ -22,6 +22,12 @@ export async function del(this: DiscordManager, key: string) {
             await masterDataIndex.channel.messages.edit(masterDataIndex.indexMessage, {
                 content: masterDataIndex.index.replace(new RegExp(`${key}:(\\d{18,19})`, 'm'), '')
             });
+
+            if(dataIndex.channel.nsfw && dataIndex.index.length + key.length + 20 < 2000) {
+                await dataIndex.channel.setNSFW(false);
+                dataIndex.full = false;
+            }
+
             return;
         }
     }
