@@ -23,6 +23,18 @@ export async function set(this: DiscordManager, key: string, value: string) {
     for(const dataChannel of globalIndex.dataChannels) {
         const dataIndex = await getDataIndex(this.master.client, dataChannel);
 
+        const match = dataIndex.index.match(new RegExp(`${key}:(\\d{18,19})`, 'm'));
+        if(match && match[1]) {
+            const slaveId = (await dataIndex.indexMessage.channel.messages.fetch(match[1])).author.id;
+            const editSlave = this.getSlaveById(slaveId)?.client;
+            if(editSlave) {
+                await (editSlave.guilds.cache.get(this.guildId)!.channels.cache.get(dataChannel.channelId) as TextChannel).messages.edit(match[1], {content: value});
+            } else {
+                await this.del(key);
+            }
+            return;
+        }
+
         if(dataIndex.index.length + key.length + 20 > 2000) {
             await dataIndex.channel.setNSFW(true);
             dataIndex.full = true;
