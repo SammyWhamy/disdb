@@ -49,11 +49,11 @@ export class StorageClient {
         return this.discordManager.get(key);
     }
 
-    public async exists(key: string): Promise<void> {
+    public async exists(key: string): Promise<boolean> {
         if(!this.discordManager)
             throw new Error("Discord manager is not initialized");
 
-        await this.discordManager.exists(key);
+        return await this.discordManager.exists(key);
     }
 
     public async delete(key: string): Promise<void> {
