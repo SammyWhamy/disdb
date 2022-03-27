@@ -25,8 +25,8 @@ export async function getGlobalIndex(client: Client, guildId: string): Promise<G
             throw new Error("Index message could not be parsed.");
 
         return {
-            id: parseInt(match[0]),
-            channelId: match[1],
+            id: parseInt(match[1]),
+            channelId: match[2],
             guildId: guildId,
         };
     }) ?? [];
