@@ -1,7 +1,6 @@
 import {Config} from "../types/Config.js";
 import {discordConfig} from "../config/discordConfig.js";
 import {Client} from "discord.js";
-import {messageHandler} from "./handlers/messageHandler.js";
 import {defaultLogger as console} from "../utils/Logger.js";
 import {DMaster, DSlave} from "../types/DiscordClients.js";
 import { set } from "./data/keyvalue/set.js";
@@ -11,6 +10,7 @@ import {del} from "./data/keyvalue/delete.js";
 import {GlobalIndex} from "../types/GlobalIndex.js";
 import {getGlobalIndex} from "./data/getGlobalIndex.js";
 import {messageUpdateHandler} from "./handlers/messageUpdateHandler.js";
+import {runServerSetup} from "./discord/runServerSetup.js";
 
 export class DiscordManager {
     private readonly config: Config["discord"];
@@ -24,6 +24,8 @@ export class DiscordManager {
     public get = get;
     public del = del;
     public exists = exists;
+
+    public runServerSetup = runServerSetup;
 
     constructor(config: Config["discord"]) {
         this.config = config;
@@ -76,10 +78,6 @@ export class DiscordManager {
     private startListeners() {
         if(!this.master)
             throw new Error("Master not initialized");
-
-        let prefix = this.config.prefix;
-        console.debug(`Using prefix ${prefix}`);
-        this.master.client.on("messageCreate", m => messageHandler(m, prefix));
 
         const boundMessageUpdateHandler = messageUpdateHandler.bind(this);
         this.master.client.on("messageUpdate", (_, m) => boundMessageUpdateHandler(m));

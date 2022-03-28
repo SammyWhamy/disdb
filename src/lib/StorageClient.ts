@@ -22,9 +22,6 @@ export class StorageClient {
         if(!config.discord.bots.slaves || config.discord.bots.slaves.length === 0)
             throw new Error("Discord slaves are not defined");
 
-        if(!config.discord.prefix)
-            console.warn("No prefix was specified, you will not be able to run commands.");
-
         this.config = config;
     }
 
@@ -61,5 +58,12 @@ export class StorageClient {
             throw new Error("Discord manager is not initialized");
 
         await this.discordManager.del(key);
+    }
+
+    public async runServerSetup(): Promise<void> {
+        if(!this.discordManager)
+            throw new Error("Discord manager is not initialized");
+
+        await this.discordManager.runServerSetup();
     }
 }
