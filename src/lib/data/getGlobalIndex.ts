@@ -11,15 +11,13 @@ export async function getGlobalIndex(this: DiscordManager): Promise<GlobalIndex>
     if(!guild)
         throw new Error("Guild not found");
 
-    const indexChannel = guild.rulesChannel || guild.systemChannel;
-
-    if(!indexChannel)
+    if(!guild.rulesChannel)
         throw new Error("Index channel could not be found.");
 
-    if(!indexChannel.topic)
+    if(!guild.rulesChannel.topic)
         throw new Error("Index message could not be found.");
 
-    const indexMessage = await indexChannel.messages.fetch(indexChannel.topic)
+    const indexMessage = await guild.rulesChannel.messages.fetch(guild.rulesChannel.topic)
 
     const dataChannels = indexMessage.content.match(regexConfig.index.data)?.map(x => {
         const match = x.match(regexConfig.index.dataGroups);

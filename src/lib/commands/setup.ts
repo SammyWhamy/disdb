@@ -26,7 +26,6 @@ export async function setup(message: Message) {
     });
 
     await message.guild.setRulesChannel(indexChannel);
-    await message.guild.setSystemChannel(indexChannel);
 
     const indexMsg = await indexChannel.send(`**INDEX**\n\nc:${dataCategory.id}`);
     await indexChannel.setTopic(indexMsg.id);
