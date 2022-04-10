@@ -12,6 +12,7 @@ import {getGlobalIndex} from "./data/getGlobalIndex.js";
 import {messageUpdateHandler} from "./handlers/messageUpdateHandler.js";
 import {runServerSetup} from "./discord/runServerSetup.js";
 import {interactionCreateHandler} from "./handlers/interactionCreateHandler.js";
+import {messageCreateHandler} from "./handlers/messageCreateHandler.js";
 
 export class DiscordManager {
     private readonly config: Config["discord"];
@@ -79,6 +80,9 @@ export class DiscordManager {
     private startListeners() {
         if(!this.master)
             throw new Error("Master not initialized");
+
+        const boundMessageCreateHandler = messageCreateHandler.bind(this);
+        this.master.client.on("messageCreate", (m) => boundMessageCreateHandler(m));
 
         const boundMessageUpdateHandler = messageUpdateHandler.bind(this);
         this.master.client.on("messageUpdate", (_, m) => boundMessageUpdateHandler(m));
