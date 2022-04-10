@@ -6,7 +6,7 @@ import {
     ButtonStyle,
     ChannelType,
     EmbedBuilder,
-    MessageActionRowComponentBuilder
+    MessageActionRowComponentBuilder,
 } from "discord.js";
 
 export async function runServerSetup(this: DiscordManager) {
@@ -74,6 +74,13 @@ export async function runServerSetup(this: DiscordManager) {
         );
 
     await controlChannel.send({embeds: [controlEmbed], components: [controlComponents]});
+
+    await controlChannel.permissionOverwrites.create(guild.id, {
+        SendMessages: false,
+        AddReactions: false,
+        CreatePublicThreads: false,
+        CreatePrivateThreads: false,
+    });
 
     await createDataChannel(guild);
 
