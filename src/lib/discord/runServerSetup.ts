@@ -1,5 +1,6 @@
 import {createDataChannel} from "../data/createDataChannel.js";
 import {DiscordManager} from "../DiscordManager.js";
+import {ChannelType} from "discord.js";
 
 export async function runServerSetup(this: DiscordManager) {
     const guild = this.master?.client.guilds.cache.get(this.guildId);
@@ -13,17 +14,17 @@ export async function runServerSetup(this: DiscordManager) {
     }
 
     await guild.channels.create("setup", {
-        type: "GUILD_TEXT",
+        type: ChannelType.GuildText,
         position: 0,
     });
 
     const dataCategory = await guild.channels.create("data", {
-        type: "GUILD_CATEGORY",
-        position: 1,
+        type: ChannelType.GuildCategory,
+        position: 2,
     });
 
     const indexChannel = await guild.channels.create("index", {
-        type: "GUILD_TEXT",
+        type: ChannelType.GuildText,
         position: 0,
         parent: dataCategory.id,
     });

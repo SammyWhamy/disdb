@@ -1,24 +1,26 @@
-import {ClientOptions, Intents} from "discord.js";
+import {ActivityType, ClientOptions, GatewayIntentBits} from "discord.js";
 
 export const master: ClientOptions = {
     presence: {
         activities: [{
             name: "a database",
-            type: "WATCHING",
+            type: ActivityType.Watching,
         }],
         status: "online",
     },
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-    ]
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+    ],
 }
 
 export const slave: ClientOptions = {
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-    ]
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+    ],
 }
 
 export const discordConfig = {

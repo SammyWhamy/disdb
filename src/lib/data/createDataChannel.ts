@@ -1,4 +1,4 @@
-import {Guild} from "discord.js";
+import {ChannelType, Guild} from "discord.js";
 import {regexConfig} from "../../config/commonConfig.js";
 import {DataIndex} from "../../types/DataIndex.js";
 
@@ -29,7 +29,7 @@ export async function createDataChannel(guild: Guild): Promise<DataIndex | undef
 
     const dataChannelName = `d_${dataChannels ? dataChannels.length : 0}`
     const dataChannel = await guild.channels.create(dataChannelName, {
-        type: "GUILD_TEXT",
+        type: ChannelType.GuildText,
         position: 1,
         parent: dataCategory.toString().slice(2),
     });
