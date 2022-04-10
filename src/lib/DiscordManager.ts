@@ -11,6 +11,7 @@ import {GlobalIndex} from "../types/GlobalIndex.js";
 import {getGlobalIndex} from "./data/getGlobalIndex.js";
 import {messageUpdateHandler} from "./handlers/messageUpdateHandler.js";
 import {runServerSetup} from "./discord/runServerSetup.js";
+import {interactionCreateHandler} from "./handlers/interactionCreateHandler.js";
 
 export class DiscordManager {
     private readonly config: Config["discord"];
@@ -81,6 +82,9 @@ export class DiscordManager {
 
         const boundMessageUpdateHandler = messageUpdateHandler.bind(this);
         this.master.client.on("messageUpdate", (_, m) => boundMessageUpdateHandler(m));
+
+        const boundInteractionCreateHandler = interactionCreateHandler.bind(this);
+        this.master.client.on("interactionCreate", (i) => boundInteractionCreateHandler(i));
 
         console.debug("Listeners started");
     }
