@@ -3,6 +3,8 @@
 
 ### Features:
 - A simple key value database
+- Keys with TTL stored as Guild Events
+- Values stored in the cover image of events
 - Entirely hosted in Discord
 - Horrible performance
 - Dirt poor security
