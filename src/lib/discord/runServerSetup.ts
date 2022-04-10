@@ -36,4 +36,6 @@ export async function runServerSetup(this: DiscordManager) {
     await indexChannel.setTopic(indexMsg.id);
 
     await createDataChannel(guild);
+
+    await guild.channels.fetch();
 }

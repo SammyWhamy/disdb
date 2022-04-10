@@ -8,7 +8,7 @@ export async function getDataIndex(client: Client, dataChannel: DataChannel): Pr
     if(!guild)
         throw new Error("Guild not found");
 
-    const discordDataChannel = guild.channels.cache.get(dataChannel.channelId) as TextChannel;
+    const discordDataChannel = await guild.channels.fetch(dataChannel.channelId) as TextChannel;
     if(!discordDataChannel)
         throw new Error("Data channel could not be found.");
 
