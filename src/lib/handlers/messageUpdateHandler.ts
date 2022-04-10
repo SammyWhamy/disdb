@@ -3,7 +3,7 @@ import {DiscordManager} from "../DiscordManager.js";
 import {regexConfig} from "../../config/commonConfig.js";
 
 export async function messageUpdateHandler(this: DiscordManager, message: Message | PartialMessage) {
-    if(!message.partial)
+    if(message.partial)
         message = await message.fetch();
 
     if(!message.content)
