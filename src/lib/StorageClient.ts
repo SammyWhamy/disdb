@@ -32,11 +32,17 @@ export class StorageClient {
         console.info("Discord manager initialized");
     }
 
-    public async set(key: string, value: string): Promise<void> {
+    public async set(key: string, value: string, ttl?: number | Date): Promise<void> {
         if(!this.discordManager)
             throw new Error("Discord manager is not initialized");
 
-        await this.discordManager.set(key, value);
+        if(!ttl)
+            return await this.discordManager.set(key, value);
+
+        if(typeof ttl === "number")
+            ttl = new Date(Date.now() + ttl * 1000);
+
+        await this.discordManager.setWithTTL(key, value, ttl);
     }
 
     public async get(key: string): Promise<string | null> {

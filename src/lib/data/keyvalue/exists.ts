@@ -12,6 +12,9 @@ export async function exists(this: DiscordManager, key: string): Promise<boolean
     if(!regexConfig.key.test(key))
         throw new Error('Key must match a-zA-Z0-9_-');
 
+    if(this.globalIndex.events.find(e => e.name === key))
+        return true;
+
     const slave = this.getRandomSlave().client;
 
     for(const dataChannel of this.globalIndex.dataChannels) {

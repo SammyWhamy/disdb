@@ -12,6 +12,7 @@ export const master: ClientOptions = {
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildScheduledEvents,
     ],
 }
 
@@ -20,6 +21,7 @@ export const slave: ClientOptions = {
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildScheduledEvents,
     ],
 }
 

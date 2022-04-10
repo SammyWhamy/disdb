@@ -13,6 +13,9 @@ import {messageUpdateHandler} from "./handlers/messageUpdateHandler.js";
 import {runServerSetup} from "./discord/runServerSetup.js";
 import {interactionCreateHandler} from "./handlers/interactionCreateHandler.js";
 import {messageCreateHandler} from "./handlers/messageCreateHandler.js";
+import {setWithTTL} from "./data/keyvalue/setWithTTL.js";
+import {guildScheduledEventCreateHandler} from "./handlers/guildScheduledEventCreateHandler.js";
+import {guildScheduledEventUpdateHandler} from "./handlers/guildScheduledEventUpdateHandler.js";
 
 export class DiscordManager {
     private readonly config: Config["discord"];
@@ -26,6 +29,7 @@ export class DiscordManager {
     public get = get;
     public del = del;
     public exists = exists;
+    public setWithTTL = setWithTTL;
 
     public runServerSetup = runServerSetup;
 
@@ -89,6 +93,12 @@ export class DiscordManager {
 
         const boundInteractionCreateHandler = interactionCreateHandler.bind(this);
         this.master.client.on("interactionCreate", (i) => boundInteractionCreateHandler(i));
+
+        const boundGuildScheduledEventCreateHandler = guildScheduledEventCreateHandler.bind(this);
+        this.master.client.on("guildScheduledEventCreate", (e) => boundGuildScheduledEventCreateHandler(e));
+
+        const boundGuildScheduledEventUpdateHandler = guildScheduledEventUpdateHandler.bind(this);
+        this.master.client.on("guildScheduledEventUpdate", (_, e) => boundGuildScheduledEventUpdateHandler(e));
 
         console.debug("Listeners started");
     }

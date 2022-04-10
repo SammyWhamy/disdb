@@ -30,9 +30,14 @@ export async function modalHandler(this: DiscordManager, modal: ModalSubmitInter
         case "set": {
             const key = modal.fields.getTextInputValue("key");
             const value = modal.fields.getTextInputValue("value");
+            const ttl = parseInt(modal.fields.getTextInputValue("ttl")) || undefined;
 
             try {
-                await this.set(key, value);
+                if(ttl) {
+                    await this.setWithTTL(key, value, new Date(Date.now() + ttl * 1000));
+                } else {
+                    await this.set(key, value);
+                }
 
                 const replyEmbed = new EmbedBuilder()
                     .setTitle(`Set key: ${key}`)

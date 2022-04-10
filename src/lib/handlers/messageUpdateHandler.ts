@@ -24,9 +24,6 @@ export async function messageUpdateHandler(this: DiscordManager, message: Messag
         };
     }) ?? [];
 
-    this.globalIndex = {
-        indexMessage: message as Message,
-        guildId: this.guildId,
-        dataChannels: dataChannels,
-    }
+    this.globalIndex.indexMessage = message;
+    this.globalIndex.dataChannels = dataChannels;
 }

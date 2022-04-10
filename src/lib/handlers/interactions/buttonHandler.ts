@@ -14,6 +14,9 @@ const ModalKeyInput = new ActionRowBuilder<ModalActionRowComponentBuilder>()
             .setCustomId("key")
             .setLabel("Enter the key here:")
             .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+            .setMaxLength(100)
+            .setMinLength(1)
     );
 
 const ModalValueInput = new ActionRowBuilder<ModalActionRowComponentBuilder>()
@@ -22,6 +25,16 @@ const ModalValueInput = new ActionRowBuilder<ModalActionRowComponentBuilder>()
             .setCustomId("value")
             .setLabel("Enter the value here:")
             .setStyle(TextInputStyle.Paragraph)
+            .setRequired(true)
+    );
+
+const ModalTTLInput = new ActionRowBuilder<ModalActionRowComponentBuilder>()
+    .addComponents(
+        new TextInputBuilder()
+            .setCustomId("ttl")
+            .setLabel("Enter the TTL here:")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
     );
 
 export async function buttonHandler(this: DiscordManager, interaction: ButtonInteraction) {
@@ -43,7 +56,7 @@ export async function buttonHandler(this: DiscordManager, interaction: ButtonInt
                 .setTitle("Set a value in the database")
                 .setCustomId("set");
 
-            modal.addComponents(ModalKeyInput, ModalValueInput);
+            modal.addComponents(ModalKeyInput, ModalValueInput, ModalTTLInput);
 
             await interaction.showModal(modal);
 
