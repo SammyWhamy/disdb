@@ -67,6 +67,10 @@ export async function runServerSetup(this: DiscordManager) {
                 .setLabel("Delete")
                 .setCustomId("delete")
                 .setStyle(ButtonStyle.Danger),
+            new ButtonBuilder()
+                .setLabel("Exists")
+                .setCustomId("exists")
+                .setStyle(ButtonStyle.Secondary),
         );
 
     await controlChannel.send({embeds: [controlEmbed], components: [controlComponents]});

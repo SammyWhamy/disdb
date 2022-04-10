@@ -61,5 +61,17 @@ export async function buttonHandler(this: DiscordManager, interaction: ButtonInt
 
             break;
         }
+
+        case "exists": {
+            const modal = new ModalBuilder()
+                .setTitle("Check if a value exists in the database")
+                .setCustomId("exists");
+
+            modal.addComponents(ModalKeyInput);
+
+            await interaction.showModal(modal);
+
+            break;
+        }
     }
 }

@@ -1,7 +1,7 @@
 import {Interaction} from "discord.js";
 import {DiscordManager} from "../DiscordManager.js";
-import {buttonHandler} from "./interactionHandlers/buttonHandler.js";
-import {modalHandler} from "./interactionHandlers/modalHandler.js";
+import {buttonHandler} from "./interactions/buttonHandler.js";
+import {modalHandler} from "./interactions/modalHandler.js";
 
 export async function interactionCreateHandler(this: DiscordManager, interaction: Interaction) {
     if(interaction.isButton())

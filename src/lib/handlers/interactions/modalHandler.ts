@@ -55,5 +55,18 @@ export async function modalHandler(this: DiscordManager, modal: ModalSubmitInter
 
             break;
         }
+
+        case "exists": {
+            const key = modal.fields.getTextInputValue("key");
+
+            const replyEmbed = new EmbedBuilder()
+                .setTitle(`Key: ${key}`)
+                .setDescription(await this.exists(key) ? "Key exists" : "Key does not exist")
+                .setColor(8560895);
+
+            await modal.reply({embeds: [replyEmbed], ephemeral: true});
+
+            break;
+        }
     }
 }
