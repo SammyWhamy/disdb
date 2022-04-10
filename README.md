@@ -15,8 +15,6 @@ import { StorageClient } from 'disdb';
 let client = new StorageClient({
     logLevel: "INFO",
     discord: {
-        // The prefix you want to use for the master client
-        prefix: "!",
         // The ID of your storage server here
         storageServer: "id",
         bots: {
@@ -32,6 +30,11 @@ let client = new StorageClient({
         }
     }
 });
+
+// Deletes all channels in the storage server and creates the correct layout for the database
+// Use this with caution, it should only be used once to create the database, any further use
+// will wipe the database.
+await client.runServerSetup();
 
 // Connect all clients to Discord and waits until they're ready
 await client.connect();
