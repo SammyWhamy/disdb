@@ -1,6 +1,6 @@
 import {DiscordManager} from "../../DiscordManager.js";
 import {ButtonInteraction} from "discord.js";
-import {DeleteModal, ExistsModal, GetModal, SetModal} from "../../resources/components.js";
+import {DeleteModal, ExistsModal, GetModal, SetModal} from "../../resources/components/modals.js";
 
 export async function buttonHandler(this: DiscordManager, interaction: ButtonInteraction) {
     switch(interaction.customId) {
