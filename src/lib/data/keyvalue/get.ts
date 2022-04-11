@@ -2,7 +2,7 @@ import {getDataIndex} from "../getDataIndex.js";
 import {regexConfig} from "../../../config/commonConfig.js";
 import {DiscordManager} from "../../DiscordManager.js";
 import {getImageFromEvent} from "../getImageFromEvent.js";
-import {getDataFromJPEG} from "../getDataFromJPEG.js";
+import {decode as JPEGDecode} from "../JPEG.js";
 
 export async function get(this: DiscordManager, key: string): Promise<string | null> {
     if(!this.master)
@@ -23,7 +23,7 @@ export async function get(this: DiscordManager, key: string): Promise<string | n
         if(!image)
             throw new Error("Key was found but data was not found");
 
-        return await getDataFromJPEG(image);
+        return await JPEGDecode(image);
     } else {
         for(const dataChannel of this.globalIndex.dataChannels) {
             const dataIndex = await getDataIndex(slave, dataChannel);

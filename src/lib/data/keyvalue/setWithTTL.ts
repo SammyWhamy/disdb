@@ -1,6 +1,7 @@
 import {regexConfig} from "../../../config/commonConfig.js";
 import {DiscordManager} from "../../DiscordManager.js";
 import {GuildScheduledEventEntityType, GuildScheduledEventPrivacyLevel} from "discord.js";
+import {encode as JPEGEncode} from "../JPEG.js";
 
 export async function setWithTTL(this: DiscordManager, key: string, value: any, ttl: Date): Promise<void> {
     if(!this.master)
@@ -20,20 +21,13 @@ export async function setWithTTL(this: DiscordManager, key: string, value: any, 
 
     const guild = slave.guilds.cache.get(this.guildId)!;
 
-    const hexString = Buffer.from(value).toString('hex');
-
-    const jpeg =
-        "FFD8FFDB004300FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0000B080001000101011100FFC40014000100000000000000000000000000000003FFC40014100100000000000000000000000000000000FFDA0008010100003F0037FFFE"
-        + hexString
-        + "FFD9";
-
     await guild.scheduledEvents.create({
         name: key,
         scheduledStartTime: ttl,
         scheduledEndTime: new Date(ttl.getTime() + 10000),
         privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
         entityType: GuildScheduledEventEntityType.External,
-        image: `data:image/jpeg;base64,${Buffer.from(jpeg, 'hex').toString('base64')}`,
+        image: JPEGEncode(value),
         entityMetadata: {
             location: ".",
         },
