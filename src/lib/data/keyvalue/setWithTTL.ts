@@ -24,7 +24,7 @@ export async function setWithTTL(this: DiscordManager, key: string, value: any, 
     await guild.scheduledEvents.create({
         name: key,
         scheduledStartTime: ttl,
-        scheduledEndTime: new Date(ttl.getTime() + 10000),
+        scheduledEndTime: new Date(ttl.getTime() + 1),
         privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
         entityType: GuildScheduledEventEntityType.External,
         image: JPEGEncode(value),

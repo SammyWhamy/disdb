@@ -5,8 +5,6 @@ export async function guildScheduledEventUpdateHandler(this: DiscordManager, eve
     if(!this.globalIndex)
         return;
 
-    if(event.status === GuildScheduledEventStatus.Active) {
-        await event.delete();
+    if(event.status === GuildScheduledEventStatus.Active)
         this.globalIndex.events = this.globalIndex.events.filter(event => event.id !== event.id);
-    }
 }
