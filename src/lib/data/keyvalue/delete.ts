@@ -26,7 +26,7 @@ export async function del(this: DiscordManager, key: string) {
                 await dataIndex.channel.messages.delete(match[1])
                 const masterDataIndex = await getDataIndex(this.master.client, dataChannel);
                 await masterDataIndex.channel.messages.edit(masterDataIndex.indexMessage, {
-                    content: masterDataIndex.index.replace(new RegExp(`${key}:(\\d{18,19})`, 'm'), '')
+                    content: masterDataIndex.index.replace(new RegExp(`${key}:(\\d{18,19})\\n?`, 'm'), '')
                 });
 
                 if(dataIndex.channel.nsfw && dataIndex.index.length + key.length + 20 < 2000) {
