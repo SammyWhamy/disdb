@@ -13,6 +13,11 @@ export const ControlPanelButtons: ActionRowData<ButtonComponentData> & Required<
         style: ButtonStyle.Success,
         type: ComponentType.Button,
     }, {
+        customId: "setjson",
+        label: "Set JSON",
+        style: ButtonStyle.Success,
+        type: ComponentType.Button,
+    }, {
         customId: "delete",
         label: "Delete",
         style: ButtonStyle.Danger,

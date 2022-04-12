@@ -11,7 +11,7 @@ export async function modalHandler(this: DiscordManager, modal: ModalSubmitInter
 
                 const replyEmbed = new EmbedBuilder()
                     .setTitle(`Result for key: ${key}`)
-                    .setDescription(value ?? "Value not found in database.")
+                    .setDescription(value ? JSON.parse(value) : "Value not found in database.")
                     .setColor(8560895);
 
                 await modal.reply({embeds: [replyEmbed], ephemeral: true});
@@ -27,10 +27,14 @@ export async function modalHandler(this: DiscordManager, modal: ModalSubmitInter
             break;
         }
 
-        case "set": {
+        case "set":
+        case "setjson":{
             const key = modal.fields.getTextInputValue("key");
-            const value = modal.fields.getTextInputValue("value");
+            let value = modal.fields.getTextInputValue("value");
             const ttl = parseInt(modal.fields.getTextInputValue("ttl")) || undefined;
+
+            if(modal.customId !== "setjson")
+                value = JSON.stringify(value);
 
             try {
                 if(ttl) {

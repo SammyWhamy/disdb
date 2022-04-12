@@ -8,6 +8,8 @@
     "target": "es2021",
     "moduleResolution": "Node",
 
+    "skipLibCheck": true,
+
     "sourceMap": true,
     "declaration": true,
     "strict": true,

@@ -37,19 +37,19 @@ export class StorageClient {
             throw new Error("Discord manager is not initialized");
 
         if(!ttl)
-            return await this.discordManager.set(key, value);
+            return await this.discordManager.set(key, JSON.stringify(value));
 
         if(typeof ttl === "number")
             ttl = new Date(Date.now() + ttl * 1000);
 
-        await this.discordManager.setWithTTL(key, value, ttl);
+        await this.discordManager.setWithTTL(key, JSON.stringify(value), ttl);
     }
 
     public async get(key: string): Promise<string | null> {
         if(!this.discordManager)
             throw new Error("Discord manager is not initialized");
 
-        return this.discordManager.get(key);
+        return JSON.stringify(await this.discordManager.get(key));
     }
 
     public async exists(key: string): Promise<boolean> {
