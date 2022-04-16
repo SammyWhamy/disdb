@@ -9,10 +9,17 @@ export async function modalHandler(this: DiscordManager, modal: ModalSubmitInter
             try {
                 const value = await this.get(key);
 
-                const replyEmbed = new EmbedBuilder()
-                    .setTitle(`Result for key: ${key}`)
-                    .setDescription(value ? JSON.parse(value) : "Value not found in database.")
-                    .setColor(8560895);
+                const replyEmbed = value
+                    ?
+                    new EmbedBuilder()
+                        .setTitle(`Result for key: ${key}`)
+                        .setDescription(value)
+                        .setColor(8560895)
+                    :
+                    new EmbedBuilder()
+                        .setTitle(`Key not found`)
+                        .setDescription(`Key: ${key}`)
+                        .setColor(16711680)
 
                 await modal.reply({embeds: [replyEmbed], ephemeral: true});
             } catch(e: any) {
